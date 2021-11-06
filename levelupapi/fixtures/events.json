@@ -1,0 +1,25 @@
+[
+    {
+
+        "model": "levelupapi.event",
+        "pk": 1,
+        "fields": {
+            "game": 1,
+            "description": "We will be hosting a round of this game",
+            "date": "2021-08-20",
+            "time": "12:15",
+            "organizer": 1
+        }
+    },
+    {
+        "model": "levelupapi.event",
+        "pk": 2,
+        "fields": {
+            "game": 2,
+            "description": "This is going to be a blast from the past",
+            "date": "2021-10-27",
+            "time": "12:45",
+            "organizer": 1
+        }
+    }
+]

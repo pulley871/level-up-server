@@ -1,0 +1,27 @@
+[
+    {
+        "model": "levelupapi.game",
+        "pk": 1,
+        "fields": {
+            "game_type": 1,
+            "title": "Mouse Trap",
+            "maker": "Three House Studios",
+            "gamer": 1,
+            "number_of_players": 4,
+            "skill_level": 1
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 2,
+        "fields": {
+            "game_type": 2,
+            "title": "Run The Ropes",
+            "maker": "Lair Games",
+            "gamer": 1,
+            "number_of_players": 10,
+            "skill_level": 7
+        }
+    }
+]
+

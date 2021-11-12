@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db.models import fields
+from django.db.models import fields, Count
 from rest_framework import status
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from rest_framework.decorators import action
 from levelupapi.models.game import Game
 from levelupapi.models.gamer import Gamer
+from django.db.models import Q
 
 
 
@@ -69,11 +70,18 @@ class EventView(ViewSet):
 
     def list(self, request):
         """Gets all Events, or filters by organizer"""
-        events = Event.objects.all()
         gamer = Gamer.objects.get(user=request.auth.user)
+        events = Event.objects.annotate(
+            attendees_count=Count('attendees'),
+            joined=Count(
+            'attendees',
+            filter=Q(attendees=gamer)
+                )
+            )
+
         game_id = self.request.query_params.get("game_id", None)
-        for event in events:
-            event.joined = gamer in event.attendees.all()
+        # for event in events:
+        #     event.joined = gamer in event.attendees.all()
 
         if game_id is not None:
             events = events.filter(game_id =game_id)
@@ -138,7 +146,8 @@ class EventSerializer(serializers.ModelSerializer):
     organizer = GamerSerializer()
     game = GameSerializer()
     joined = serializers.BooleanField(required=False)
+    attending_count = serializers.IntegerField(default=None)
     class Meta:
         model = Event
-        fields = ("id", "game", "organizer", "description", "date","time", "attendees", "joined")
+        fields = ("id", "game", "organizer", "description", "date","time", "attendees", "joined", "attending_count")
         depth = 2

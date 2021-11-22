@@ -30,7 +30,7 @@ class EventView(ViewSet):
                 time = request.data["time"]
             )
             serializer = EventSerializer(event, context={"request": request})
-            return Response({"reason": "Event Posted"}, status= status.HTTP_201_CREATED)
+            return Response(serializer.data, status= status.HTTP_201_CREATED)
         except ValidationError as ex:
             return Response({"reason": ex.message}, status= status.HTTP_400_BAD_REQUEST)
 
@@ -62,9 +62,9 @@ class EventView(ViewSet):
         try:
             event = Event.objects.get(pk=pk)
             serializer = EventSerializer(event, context={"request": request})
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as ex:
-            return HttpResponseServerError(ex)
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -141,7 +141,7 @@ class GamerSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields =('title', 'maker', "number_of_players")
+        fields =('id','title', 'maker', "number_of_players")
 class EventSerializer(serializers.ModelSerializer):
     organizer = GamerSerializer()
     game = GameSerializer()
